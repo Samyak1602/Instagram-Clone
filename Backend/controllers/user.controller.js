@@ -104,3 +104,86 @@ export const getProfile = async(req,res) =>{
         console.log(error);
     }
 }
+
+export const editProfile = async (req,res)=>{
+    try{
+        const  userId = req.id;
+        const {bio,gender} = req.body;
+        const profilePicture = req.file;
+        let cloudResponse;
+        if(profilePicture){
+            const fileUri = getDataUri(profilePicture);
+            cloudResponse = await cloudinary.uploader.upload(fileUri);
+        }
+
+        const user = await User.findById(userId);
+        if(!user){
+            return res.status(404).json({
+                message: "User not found",
+                success:false,
+            })
+        }
+        if(bio) user.bio = bio;
+        if(gender) user.gender = gender;
+        if(profilePicture) user.profilePicture = cloudResponse.secure_url;
+
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export const getSuggestedUsers = async (req,res)=>{
+    try{
+        const  suggestedUsers = await User.find({_id:{$ne:req.id}}).select("-password");
+        if(!suggestedUsers){
+            return res.status(400).json({
+                message: "No suggested users",
+            })    
+        }
+        return res.status(200).json({
+            success:true,
+            users:suggestedUsers
+        })
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export const followOrUnfollow = async (req,res) => {
+    try{
+        const followKrneWala = req.id;
+        const jiskoFollowKrunga = req.params.id;
+        if(followKrneWala === jiskoFollowKrunga){
+            return res.status(400).json({
+                message: "You can't follow yourself",
+                success:false
+            })    
+        }
+        const user = await User.findById(followKrneWala);
+        const targetUser = await User.findById(jiskoFollowKrunga);
+        if(!user || !targetUser){
+            return res.status(404).json({
+                message: "User not found",
+                success:false
+            })
+        }
+        const  isFollowing = user.following.includes(jiskoFollowKrunga);
+        if(isFollowing){
+            await Promise.all([
+                User.updateOne({_id:followKrneWala},{$pull: {following:jiskoFollowKrunga}}),
+                User.updateOne({_id:jiskoFollowKrunga},{$pull: {followers:followKrneWala}})
+            ])
+            return res.status(200).json({message:'Unfollowed successfully',success:true})
+
+        }else{
+            await Promise.all([
+                User.updateOne({_id:followKrneWala},{$push: {following:jiskoFollowKrunga}}),
+                User.updateOne({_id:jiskoFollowKrunga},{$push: {followers:followKrneWala}})
+            ])
+            return res.status(200).json({message:'followed successfully',success:true})
+        }
+
+    }catch(error){
+        console.log(error);
+    }
+}
