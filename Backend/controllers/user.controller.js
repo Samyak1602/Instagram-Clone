@@ -1,6 +1,9 @@
 import { User } from "../model/user.model.js";
 import bcrypt from  'bcryptjs';
 import jwt from  'jsonwebtoken';
+import getDataUri from "../utils/datauri.js";
+import cloudinary from "../utils/cloudinary.js";
+
 
 
 export const register = async (req,res)=>{
@@ -36,7 +39,7 @@ export const register = async (req,res)=>{
 
 export const login  = async (req,res)=>{
     try{
-        const {email,password} = re.body;
+        const {email,password} = req.body;
         if( !email || !password){
             return res.status(401).json({
                 message:"Please fill in all fields",
@@ -95,7 +98,7 @@ export const logout = async (_,res)=>{
 export const getProfile = async(req,res) =>{
     try{
         const userId = req.params.id;
-        let user = await User.findById(userId);
+        let user = await User.findById(userId).select('-password');
         return res.status(200).json({
             user,
             success:true
@@ -105,33 +108,41 @@ export const getProfile = async(req,res) =>{
     }
 }
 
-export const editProfile = async (req,res)=>{
-    try{
-        const  userId = req.id;
-        const {bio,gender} = req.body;
+export const editProfile = async (req, res) => {
+    try {
+        const userId = req.id;
+        const { bio, gender } = req.body;
         const profilePicture = req.file;
         let cloudResponse;
-        if(profilePicture){
+
+        if (profilePicture) {
             const fileUri = getDataUri(profilePicture);
             cloudResponse = await cloudinary.uploader.upload(fileUri);
         }
 
-        const user = await User.findById(userId);
-        if(!user){
+        const user = await User.findById(userId).select('-password');
+        if (!user) {
             return res.status(404).json({
-                message: "User not found",
-                success:false,
-            })
-        }
-        if(bio) user.bio = bio;
-        if(gender) user.gender = gender;
-        if(profilePicture) user.profilePicture = cloudResponse.secure_url;
+                message: 'User not found.',
+                success: false
+            });
+        };
+        if (bio) user.bio = bio;
+        if (gender) user.gender = gender;
+        if (profilePicture) user.profilePicture = cloudResponse.secure_url;
 
-    }catch(error){
+        await user.save();
+
+        return res.status(200).json({
+            message: 'Profile updated.',
+            success: true,
+            user
+        });
+
+    } catch (error) {
         console.log(error);
     }
-}
-
+};
 export const getSuggestedUsers = async (req,res)=>{
     try{
         const  suggestedUsers = await User.find({_id:{$ne:req.id}}).select("-password");
