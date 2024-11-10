@@ -26,7 +26,7 @@ const Signup = () => {
         console.log(input);
         try {
             setLoading(true);
-            const res = await axios.post('https://localhost:8000/api/v1/user/register', input, {
+            const res = await axios.post('http://localhost:8000/api/v1/user/register', input, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -43,10 +43,10 @@ const Signup = () => {
             }
         } catch (error) {
             console.log(error);
-            //toast.error(error.response.data.message);
-         } //finally {
-        //     setLoading(false);
-        // }
+            toast.error(error.response.data.message);
+         } finally {
+            setLoading(false);
+         }
     }
 
     // useEffect(()=>{
@@ -91,7 +91,7 @@ const Signup = () => {
                         className="focus-visible:ring-transparent my-2"
                     />
                 </div>
-                <Button type="submit">Signup</Button>
+                <Button type='submit'>Signup</Button>
                 {/* {
                     loading ? (
                         <Button>

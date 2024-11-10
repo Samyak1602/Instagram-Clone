@@ -1,16 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import {Button} from './components/ui/button'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Signup from './components/Signup'
+import MainLayout from './components/MainLayout'
+import Home from './components/Home'
+
+const browserRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <MainLayout />,
+    children: [
+      {
+      path: '/',
+      element: <Home />,
+      }
+    ]
+  },
+  {
+    path: '/login',
+    element: <Login />
+  },
+  {
+    path: '/signup',
+    element: <Signup />
+  },
+])
+
 
 function App() {
   
 
   return (
     <>
-     <Signup />
+     <RouterProvider router={browserRouter} />
      
     </>
   )
