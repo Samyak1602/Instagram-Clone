@@ -9,7 +9,6 @@ import Signup from './components/Signup'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from 'react-redux'
-import { setSocket } from './redux/socketSlice'
 import { setOnlineUsers } from './redux/chatSlice'
 import { setLikeNotification } from './redux/rtnSlice'
 import ProtectedRoutes from './components/ProtectedRoutes'
@@ -61,7 +60,6 @@ function App() {
         },
         transports: ['websocket']
       });
-      dispatch(setSocket(socketio));
 
       // listen all the events
       socketio.on('getOnlineUsers', (onlineUsers) => {
@@ -74,11 +72,9 @@ function App() {
 
       return () => {
         socketio.close();
-        dispatch(setSocket(null));
       }
     } else if (socket) {
       socket.close();
-      dispatch(setSocket(null));
     }
   }, [user, dispatch]);
 
