@@ -1,4 +1,4 @@
-import { Heart, Home, LogOut, MessageCircle, PlusSquare, Search, TrendingUp } from 'lucide-react'
+import { Heart, Home, LogOut, MessageCircle, PlusSquare, Search, TrendingUp, Briefcase } from 'lucide-react'  // Import the Briefcase icon
 import React, { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { toast } from 'sonner'
@@ -17,7 +17,6 @@ const LeftSidebar = () => {
     const { likeNotification } = useSelector(store => store.realTimeNotification);
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
-
 
     const logoutHandler = async () => {
         try {
@@ -45,6 +44,8 @@ const LeftSidebar = () => {
             navigate("/");
         } else if (textType === 'Messages') {
             navigate("/chat");
+        } else if (textType === "Jobs") {
+            navigate("/jobs");  // Navigate to a jobs page when clicked
         }
     }
 
@@ -64,8 +65,10 @@ const LeftSidebar = () => {
             ),
             text: "Profile"
         },
+        { icon: <Briefcase />, text: "Jobs" },  // Added Jobs icon and text
         { icon: <LogOut />, text: "Logout" },
     ]
+
     return (
         <div className='fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[16%] h-screen'>
             <div className='flex flex-col'>
@@ -113,7 +116,6 @@ const LeftSidebar = () => {
             </div>
 
             <CreatePost open={open} setOpen={setOpen} />
-
         </div>
     )
 }

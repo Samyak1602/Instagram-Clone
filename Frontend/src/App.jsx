@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setOnlineUsers } from './redux/chatSlice'
 import { setLikeNotification } from './redux/rtnSlice'
 import ProtectedRoutes from './components/ProtectedRoutes'
+import JobsPage from './components/JobsPage'
 
 
 const browserRouter = createBrowserRouter([
@@ -34,6 +35,10 @@ const browserRouter = createBrowserRouter([
       {
         path: '/chat',
         element: <ProtectedRoutes><ChatPage /></ProtectedRoutes>
+      },
+      {
+        path: '/jobs',
+        element: <ProtectedRoutes><JobsPage /></ProtectedRoutes>
       },
     ]
   },

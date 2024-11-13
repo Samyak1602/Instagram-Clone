@@ -3,6 +3,7 @@ import authSlice from "./authSlice.js";
 import postSlice from './postSlice.js';
 import socketSlice from "./socketSlice.js"
 import chatSlice from "./chatSlice.js";
+import jobSlice from "./jobSlice.js"
 import rtnSlice from "./rtnSlice.js";
 
 import { 
@@ -28,7 +29,8 @@ const rootReducer = combineReducers({
     post:postSlice,
     socketio:socketSlice,
     chat:chatSlice,
-    realTimeNotification:rtnSlice
+    realTimeNotification:rtnSlice,
+    jobs:jobSlice // Update the key to match the slice name
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
