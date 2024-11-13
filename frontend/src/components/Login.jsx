@@ -5,17 +5,18 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAuthUser } from '@/redux/authSlice';
 
-const Signup = () => {
+const Login = () => {
     const [input, setInput] = useState({
-        username: "",
         email: "",
         password: ""
     });
     const [loading, setLoading] = useState(false);
     const {user} = useSelector(store=>store.auth);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
@@ -25,17 +26,17 @@ const Signup = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            const res = await axios.post('http://localhost:8000/api/v1/user/register', input, {
+            const res = await axios.post('http://localhost:8000/api/v1/user/login', input, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 withCredentials: true
             });
             if (res.data.success) {
-                navigate("/login");
+                dispatch(setAuthUser(res.data.user));
+                navigate("/");
                 toast.success(res.data.message);
                 setInput({
-                    username: "",
                     email: "",
                     password: ""
                 });
@@ -58,17 +59,7 @@ const Signup = () => {
             <form onSubmit={signupHandler} className='shadow-lg flex flex-col gap-5 p-8'>
                 <div className='my-4'>
                     <h1 className='text-center font-bold text-xl'>LOGO</h1>
-                    <p className='text-sm text-center'>Signup to see photos & videos from your friends</p>
-                </div>
-                <div>
-                    <span className='font-medium'>Username</span>
-                    <Input
-                        type="text"
-                        name="username"
-                        value={input.username}
-                        onChange={changeEventHandler}
-                        className="focus-visible:ring-transparent my-2"
-                    />
+                    <p className='text-sm text-center'>Login to see photos & videos from your friends</p>
                 </div>
                 <div>
                     <span className='font-medium'>Email</span>
@@ -97,13 +88,14 @@ const Signup = () => {
                             Please wait
                         </Button>
                     ) : (
-                        <Button type='submit'>Signup</Button>
+                        <Button type='submit'>Login</Button>
                     )
                 }
-                <span className='text-center'>Already have an account? <Link to="/login" className='text-blue-600'>Login</Link></span>
+
+                <span className='text-center'>Dosent have an account? <Link to="/signup" className='text-blue-600'>Signup</Link></span>
             </form>
         </div>
     )
 }
 
-export default Signup
+export default Login

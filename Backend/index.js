@@ -3,35 +3,42 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
-import  userRoute from "./routes/user.route.js";
+import userRoute from "./routes/user.route.js";
+import postRoute from "./routes/post.route.js";
+import messageRoute from "./routes/message.route.js";
+import { app, server } from "./socket/socket.js";
+import path from "path";
+ 
+dotenv.config();
 
-
-dotenv.config({});
-
-const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-app.get("/",(req,res)=>{
-    return res.status(200).json({
-        message: "I'm coming from backend",
-        success:true
-    })
-})
-//Middlewares
+const __dirname = path.resolve();
+
+//middlewares
 app.use(express.json());
 app.use(cookieParser());
-app.use(urlencoded({extended:true}));
-
+app.use(urlencoded({ extended: true }));
 const corsOptions = {
-    origin: 'http://localhost:5173',
-    credentials: true,
+    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    credentials: true
 }
 app.use(cors(corsOptions));
 
-app.use("/api/v1/user",userRoute);
+// yha pr apni api ayengi
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/post", postRoute);
+app.use("/api/v1/message", messageRoute);
 
-app.listen(PORT,()=>{
-    connectDB();
-    console.log(`Server is running on port ${PORT}`);
+
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
+app.get("*", (req,res)=>{
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
 })
+
+
+server.listen(PORT, () => {
+    connectDB();
+    console.log(`Server listen at port ${PORT}`);
+});
