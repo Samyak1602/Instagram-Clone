@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuthUser } from '@/redux/authSlice';
+import logo from '../assets/logo.jpg'; // Import the logo image
 
 const Login = () => {
     const [input, setInput] = useState({
@@ -58,7 +59,7 @@ const Login = () => {
         <div className='flex items-center w-screen h-screen justify-center'>
             <form onSubmit={signupHandler} className='shadow-lg flex flex-col gap-5 p-8'>
                 <div className='my-4'>
-                    <h1 className='text-center font-bold text-xl'>LOGO</h1>
+                <img src={logo} alt="gogo" className='mx-16 my-8 pl-3 w-32' /> {/* Replace text with image */}
                     <p className='text-sm text-center'>Login to see photos & videos from your friends</p>
                 </div>
                 <div>
