@@ -151,7 +151,7 @@ const Post = ({ post }) => {
                         dispatch(setSelectedPost(post));
                         setOpen(true);
                     }} className='cursor-pointer hover:text-gray-600' />
-                    <Send className='cursor-pointer hover:text-gray-600' />
+                    {/* <Send className='cursor-pointer hover:text-gray-600' /> */}
                 </div>
                 <Bookmark onClick={bookmarkHandler} className='cursor-pointer hover:text-gray-600' />
             </div>
