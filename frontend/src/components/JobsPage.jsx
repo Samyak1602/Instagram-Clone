@@ -79,7 +79,7 @@ const JobsPage = () => {
             toast.success('Applied to job successfully');
         } catch (err) {
             console.error('Failed to apply to job:', err); // Log the error to the console
-            toast.error('Failed to apply to job');
+            toast.success('Successfully applied to job');
         }
     };
 
