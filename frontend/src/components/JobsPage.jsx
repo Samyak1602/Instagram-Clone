@@ -78,8 +78,8 @@ const JobsPage = () => {
             dispatch(setJobs(updatedJobs));
             toast.success('Applied to job successfully');
         } catch (err) {
-            console.error('Successfully applied to job', err); // Log the error to the console
-            toast.success('Successfully applied to job');
+            console.error('Failed to apply to job:', err); // Log the error to the console
+            toast.error('Failed to apply to job');
         }
     };
 
