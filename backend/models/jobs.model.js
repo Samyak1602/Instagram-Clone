@@ -19,8 +19,7 @@ const jobSchema = new mongoose.Schema(
     },
     jobType: {
       type: String,
-      required: true,
-      enum: ['Full-time', 'Part-time', 'Internship', 'Contract'], // You can add more job types if needed
+      required: true, // You can add more job types if needed
     },
     salaryRange: {
       type: String,
