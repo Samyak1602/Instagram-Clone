@@ -90,7 +90,7 @@ const JobsPage = () => {
     return (
         <div className='my-8 w-full max-w-2xl mx-auto'>
             {loading && <p>Loading...</p>}
-            {/* {error && <p>{error}</p>} */}
+            {error && <p>{error}</p>}
             <div className='post-job-form bg-blue-50 p-6 rounded-lg shadow-md mb-8'>
                 <h2 className='text-2xl font-semibold mb-4 text-blue-700'>Post a Job</h2>
                 <Input

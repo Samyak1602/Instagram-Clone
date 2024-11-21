@@ -234,7 +234,7 @@ export const deletePost = async (req,res) => {
         console.log(error);
     }
 }
-export const   bookmarkPost = async (req,res) => {
+export const bookmarkPost = async (req,res) => {
     try {
         const postId = req.params.id;
         const authorId = req.id;
