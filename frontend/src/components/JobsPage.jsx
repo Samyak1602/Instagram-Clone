@@ -74,12 +74,12 @@ const JobsPage = () => {
         try {
             const jobToUpdate = jobs[index];
             const response = await axios.put(`http://localhost:8000/api/v1/jobs/${jobToUpdate._id}`, { ...jobToUpdate, applied: true });
-            const updatedJobs = jobs.map((job, i) => i === index ? response.data.job : job);
+            const updatedJobs = jobs.map((job, i) => i === index ? { ...job, applied: true } : job);
             dispatch(setJobs(updatedJobs));
             toast.success('Applied to job successfully');
         } catch (err) {
             console.error('Failed to apply to job:', err); // Log the error to the console
-            toast.success('Successfully applied to job');
+            toast.error('Failed to apply to job');
         }
     };
 
